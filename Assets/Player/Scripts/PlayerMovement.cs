@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -15,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movement;
     private int currentFrame;
     private float timer;
+    float doubleJump = 0;
 
     void Start()
     {
@@ -42,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
                 sr.sprite = walkingSprites[currentFrame];
             }
         }
-        else
+        else if(Grounded())
         {
             timer += Time.deltaTime;
             if (timer >= frameRate)
@@ -54,9 +56,16 @@ public class PlayerMovement : MonoBehaviour
                 sr.sprite = idleSprites[currentFrame];
             }
         }
-        if(Input.GetKeyDown(KeyCode.Space) && Grounded())
+        if(Input.GetKeyDown(KeyCode.Space) && (doubleJump <2 || Grounded()))
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            doubleJump++;
+            Debug.Log(doubleJump);
+        }
+        else if(doubleJump >=2 && Grounded())
+        {
+            Debug.Log(doubleJump);
+            doubleJump = 0;
         }
     }
 
