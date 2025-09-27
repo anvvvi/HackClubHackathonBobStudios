@@ -21,9 +21,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Get movement input
         movement.x = Input.GetAxisRaw("Horizontal");
         // Animate only if moving
+        if (movement.x > 0)
+            sr.flipX = false;  // facing right
+        else if (movement.x < 0)
+            sr.flipX = true;   // facing left
         if (movement.magnitude > 0)
         {
             timer += Time.deltaTime;
