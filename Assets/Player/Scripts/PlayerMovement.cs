@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
     ///[Header("Player Movement"")]
         public float  speed;
         public float  jumpForce;
+        public float pola;
         
     private Rigidbody2D rb;
     void Start()
