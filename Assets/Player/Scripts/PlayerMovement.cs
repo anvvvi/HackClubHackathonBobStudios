@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 5f;
     public Sprite[] walkingSprites;  // Assign your sprites in the inspector
     public float frameRate = 0.1f;
+    public float jumpForce = 5f;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
@@ -22,8 +23,6 @@ public class PlayerMovement : MonoBehaviour
     {
         // Get movement input
         movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
-
         // Animate only if moving
         if (movement.magnitude > 0)
         {
@@ -43,11 +42,15 @@ public class PlayerMovement : MonoBehaviour
             sr.sprite = walkingSprites[0];
             currentFrame = 0;
         }
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
     }
 
     void FixedUpdate()
     {
         // Move the player
-        rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+        rb.linearVelocity = new Vector2(movement.x * speed, rb.linearVelocity.y);
     }
 }
