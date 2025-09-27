@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
     public Sprite[] walkingSprites;  // Assign your sprites in the inspector
     public float frameRate = 0.1f;
     public float jumpForce = 5f;
+    public float jumpDistance = 5f;
+    public LayerMask Ground;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
@@ -45,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
             sr.sprite = walkingSprites[0];
             currentFrame = 0;
         }
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space) && Grounded())
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
@@ -55,5 +57,11 @@ public class PlayerMovement : MonoBehaviour
     {
         // Move the player
         rb.linearVelocity = new Vector2(movement.x * speed, rb.linearVelocity.y);
+    }
+    private bool Grounded()
+    {
+        if(Physics2D.Raycast(transform.position, Vector2.down, jumpDistance,Ground))
+            return true;
+        return false;
     }
 }
