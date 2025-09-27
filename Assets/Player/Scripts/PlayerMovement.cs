@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -17,12 +18,15 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movement;
     private int currentFrame;
     private float timer;
+    private float idleTimer;
     float doubleJump = 0;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        sr.sprite = walkingSprites[0];
+        currentFrame = 0;
     }
 
     void Update()
@@ -33,6 +37,10 @@ public class PlayerMovement : MonoBehaviour
             Health--;
         }
 
+        if (Health <= 0)
+        {
+            SceneManager.LoadScene("Scene2");
+        }
         movement.x = Input.GetAxisRaw("Horizontal");
         // Animate only if moving
         if (movement.x > 0)
@@ -47,19 +55,25 @@ public class PlayerMovement : MonoBehaviour
                 timer = 0f;
                 currentFrame++;
                 if (currentFrame >= walkingSprites.Length)
-                    currentFrame = 0;
+                {
+                   currentFrame = 0;
+                   Debug.Log("ResetFrame");
+                }
                 sr.sprite = walkingSprites[currentFrame];
             }
         }
-        else if(Grounded())
+        if(Grounded() && movement.magnitude == 0)
         {
-            timer += Time.deltaTime;
-            if (timer >= frameRate)
+            idleTimer += Time.deltaTime;
+            if (idleTimer >= frameRate)
             {
-                timer = 0f;
+                idleTimer = 0f;
                 currentFrame++;
                 if (currentFrame >= idleSprites.Length)
+                {
                     currentFrame = 0;
+                    Debug.Log("ResetFrameIdle");
+                }
                 sr.sprite = idleSprites[currentFrame];
             }
         }
