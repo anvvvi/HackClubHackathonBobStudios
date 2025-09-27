@@ -3,7 +3,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5f;
-    public Sprite[] walkingSprites;  // Assign your sprites in the inspector
+    public Sprite[] walkingSprites;
+    public Sprite[] idleSprites;  // Assign your sprites in the inspector
     public float frameRate = 0.1f;
     public float jumpForce = 5f;
     public float jumpDistance = 5f;
@@ -43,9 +44,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            // Reset to idle sprite (optional)
-            sr.sprite = walkingSprites[0];
-            currentFrame = 0;
+            timer += Time.deltaTime;
+            if (timer >= frameRate)
+            {
+                timer = 0f;
+                currentFrame++;
+                if (currentFrame >= idleSprites.Length)
+                    currentFrame = 0;
+                sr.sprite = idleSprites[currentFrame];
+            }
         }
         if(Input.GetKeyDown(KeyCode.Space) && Grounded())
         {
