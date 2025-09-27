@@ -10,7 +10,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 5f;
     public float jumpDistance = 5f;
     public LayerMask Ground;
-
+    public int Health = 3;
+    
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private Vector2 movement;
@@ -26,6 +27,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (transform.position.y < -5)
+        {
+            transform.position = new Vector2(-25, 0);
+            Health--;
+        }
+
         movement.x = Input.GetAxisRaw("Horizontal");
         // Animate only if moving
         if (movement.x > 0)
@@ -66,6 +73,15 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log(doubleJump);
             doubleJump = 0;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed *= 2;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed /= 2;
         }
     }
 
