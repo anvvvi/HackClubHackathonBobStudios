@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovementLv2 : MonoBehaviour
 {
     public float speed = 5f;
     public Sprite[] walkingSprites;
@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpDistance = 5f;
     public LayerMask Ground;
     public int Health = 3;
+    public CheckSacrifice1 sacrifice1;
     
     private Rigidbody2D rb;
     private SpriteRenderer sr;
@@ -20,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     private float timer;
     private float idleTimer;
     float doubleJump = 0;
+    private int maxJumps;
+    private bool canSprint = true;
 
     void Start()
     {
@@ -27,13 +30,27 @@ public class PlayerMovement : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         sr.sprite = walkingSprites[0];
         currentFrame = 0;
+        if (CheckSacrifice1.jumpSacrifice)
+        {
+            Debug.Log("DoubleJump is sacrificed");
+            maxJumps = 0;  // double jump lost
+        }
+        else
+        {
+            maxJumps = 2;  // still has double jump
+        }
+
+        if (CheckSacrifice1.sprintSacrifice)
+        {
+            canSprint = false;
+        }
     }
 
     void Update()
     {
-        if (transform.position.y < -5)
+        if (transform.position.y < -10)
         {
-            transform.position = new Vector2(-25, 0);
+            transform.position = new Vector2(-6, 9);
             Health--;
         }
 
@@ -75,25 +92,23 @@ public class PlayerMovement : MonoBehaviour
                 sr.sprite = idleSprites[currentFrame];
             }
         }
-        if(Input.GetKeyDown(KeyCode.Space) && (doubleJump <2 || Grounded()))
+        if(Input.GetKeyDown(KeyCode.Space) && (doubleJump <maxJumps || Grounded()))
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             doubleJump++;
-            Debug.Log(doubleJump);
         }
-        else if(doubleJump >=2 && Grounded())
+        else if(doubleJump >=maxJumps && Grounded())
         {
-            Debug.Log(doubleJump);
             doubleJump = 0;
         }
         
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canSprint)
         {
-            speed *= 2;
+            speed *= 3;
         }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        else if (Input.GetKeyUp(KeyCode.LeftShift)&& canSprint)
         {
-            speed /= 2;
+            speed /= 3;
         }
     }
 
