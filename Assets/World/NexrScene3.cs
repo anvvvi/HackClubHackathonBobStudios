@@ -4,6 +4,6 @@ public class NextScene3 : MonoBehaviour
 {   void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("HitFlag");
-        SceneManager.LoadScene("");
+        SceneManager.LoadScene("Final Scene");
     }
 }

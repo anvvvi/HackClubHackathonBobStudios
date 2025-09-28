@@ -110,6 +110,10 @@ public class PlayerMovementLv3 : MonoBehaviour
         {
             speed /= 3;
         }
+        if(Input.GetKeyDown(KeyCode.LeftControl))
+            speed /= 2;
+        else if (Input.GetKeyUp(KeyCode.LeftControl))
+            speed *= 2;
     }
 
     void FixedUpdate()

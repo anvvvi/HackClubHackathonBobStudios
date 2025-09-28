@@ -95,6 +95,10 @@ public class PlayerMovement : MonoBehaviour
         {
             speed /= 2;
         }
+        if(Input.GetKeyDown(KeyCode.LeftControl))
+            speed /= 2;
+        else if (Input.GetKeyUp(KeyCode.LeftControl))
+            speed *= 2;
     }
 
     void FixedUpdate()
