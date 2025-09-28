@@ -56,7 +56,7 @@ public class PlayerMovementLv2 : MonoBehaviour
 
         if (Health <= 0)
         {
-            SceneManager.LoadScene("RestartScreen");
+            Application.Quit();
         }
         movement.x = Input.GetAxisRaw("Horizontal");
         // Animate only if moving
